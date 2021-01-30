@@ -55,8 +55,8 @@
                 </div>
                 <div class="plus-minus-btn">
                     <p>
-                    <span onclick="handleFirstClasschange(true)">+</span>
-                    <span onclick="handleFirstClasschange(false)">-</span>
+                    <span onclick="handleTicketchange('firstclass' , true)">+</span>
+                    <span onclick="handleTicketchange('firstclass' , false)">-</span>
                     </p>
                 </div>
             </div>
@@ -68,8 +68,8 @@
                 </div>
                 <div class="plus-minus-btn">
                     <p> 
-                        <span onclick="handleEconomychange(true)">+</span>
-                        <span onclick="handleEconomychange(false)">-</span>
+                        <span onclick="handleTicketchange('economy' , true)">+</span>
+                        <span onclick="handleTicketchange('economy' , false)">-</span>
                     </p>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p id="total">$0</p>
+                        <p id="grand-total">$0</p>
                     </div>
                 </div>
             </div>
@@ -111,35 +111,70 @@
     </section>
 
     <script>
-            function handleFirstClasschange (isIncrease) {
-                const firstClassInput = document.getElementById('firstclass-count')
-                const firstClassCount = parseInt(firstClassInput.value);
-                
-                let firstClassNewCount = firstClassCount
+        function handleTicketchange (ticket, isIncrease) {
+
+                const ticketCount = getInputValue(ticket);
+                let ticketNewCount = ticketCount
                 if(isIncrease == true){
-                    firstClassNewCount= firstClassCount + 1;
+                    ticketNewCount= ticketCount + 1;
                 }
-                if(isIncrease == false && firstClassCount > 0){
-                    firstClassNewCount = firstClassCount - 1;
+                if(isIncrease == false && ticketCount > 0){
+                    ticketNewCount = ticketCount - 1;
                 }
                 
-                firstClassInput.value = firstClassNewCount;
+                document.getElementById(ticket + '-count').value = ticketNewCount;
+                calculateSubtotal();
             }
 
-            function handleEconomychange (isIncrease) {
-                const economyInput = document.getElementById('economy-count')
-                const economyCount = parseInt(economyInput.value);
+            function calculateSubtotal(){
+                const firstClassCount = getInputValue('firstclass');
+                const economyCount = getInputValue('economy')
+
+                const totalFare = firstClassCount * 150 + economyCount * 100;
+                document.getElementById('subtotal').innerText = '$' + totalFare
+
+                const vat = Math.round(totalFare * 0.1);
+                document.getElementById('vat').innerText = '$' + vat;
                 
-                let economyNewCount = economyCount
-                if(isIncrease == true){
-                    economyNewCount= economyCount + 1;
-                }
-                if(isIncrease == false && economyCount > 0){
-                    economyNewCount = economyCount - 1;
-                }
-                
-                economyInput.value = economyNewCount;
+                const grandTotal = totalFare + vat;
+                document.getElementById('grand-total').innerText = '$' + grandTotal;
+
             }
+            function getInputValue (ticket){
+                const ticketInput = document.getElementById(ticket + '-count');
+                const ticketCount = parseInt(ticketInput.value);
+                return ticketCount;
+
+            }
+            // function handleFirstClasschange (isIncrease) {
+            //     const firstClassInput = document.getElementById('firstclass-count')
+            //     const firstClassCount = parseInt(firstClassInput.value);
+                
+            //     let firstClassNewCount = firstClassCount
+            //     if(isIncrease == true){
+            //         firstClassNewCount= firstClassCount + 1;
+            //     }
+            //     if(isIncrease == false && firstClassCount > 0){
+            //         firstClassNewCount = firstClassCount - 1;
+            //     }
+                
+            //     firstClassInput.value = firstClassNewCount;
+            // }
+
+            // function handleEconomychange (isIncrease) {
+            //     const economyInput = document.getElementById('economy-count')
+            //     const economyCount = parseInt(economyInput.value);
+                
+            //     let economyNewCount = economyCount
+            //     if(isIncrease == true){
+            //         economyNewCount= economyCount + 1;
+            //     }
+            //     if(isIncrease == false && economyCount > 0){
+            //         economyNewCount = economyCount - 1;
+            //     }
+                
+            //     economyInput.value = economyNewCount;
+            // }
     </script>
 </body>
 
